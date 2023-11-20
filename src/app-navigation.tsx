@@ -23,4 +23,9 @@ export const navigation = [
     path: "/demo-list",
     icon: "user",
   },
+  {
+    text: "Test List",
+    path: "/test-list",
+    icon: "user",
+  },
 ];

@@ -23,14 +23,13 @@ export default function DemoList() {
 
   function loadDataSource() {
     const products: Product[] = [];
-
     const product1: Product = {
       id: 1,
       name: "computer",
       description: "-This lien 1/n -This is line2/n -This is line3/n",
     };
     const product2: Product = {
-      id: 1,
+      id: 2,
       name: "computer",
       description: "-This lien 1/n -This is line2/n -This is line3/n",
     };

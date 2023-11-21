@@ -86,7 +86,7 @@ export default function TestList() {
         <Box direction="row" width="100%">
           <Item ratio={3}>
             <Button
-              text="Change 11 to ****"
+              text="Change 9 to ****"
               onClick={() => {
                 changeContent();
               }}

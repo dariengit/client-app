@@ -13,7 +13,9 @@ interface Message {
 function convertToHtmlTemplate(message: Message) {
   return (
     <>
-      <div>{message.content}</div>
+      <div>
+        <h1>{message.content}</h1>
+      </div>
     </>
   );
 }
@@ -31,7 +33,7 @@ export default function TestList() {
   }, []);
 
   function loadDummyMessages() {
-    for (let index = 0; index < 100; index++) {
+    for (let index = 0; index < 10; index++) {
       let message: Message = {
         id: index,
         content: index.toString(),
@@ -67,9 +69,10 @@ export default function TestList() {
 
   function changeContent() {
     const currentPosition = list.current?.instance.scrollTop() ?? 0;
-    customStore?.update(11, dummyMessage);
-    dataSource?.reload();
-    list.current?.instance.scrollTo(currentPosition);
+    customStore?.update(9, dummyMessage);
+    dataSource?.reload().then(() => {
+      list.current?.instance.scrollTo(currentPosition);
+    });
   }
 
   function UpdateCurrentPosition() {
@@ -98,6 +101,7 @@ export default function TestList() {
                     scrollingEnabled={true}
                     itemRender={convertToHtmlTemplate}
                     onScroll={UpdateCurrentPosition}
+                    repaintChangesOnly={true}
                   />
                 </div>
               </div>

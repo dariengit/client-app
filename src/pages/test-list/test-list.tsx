@@ -14,7 +14,7 @@ function convertToHtmlTemplate(message: Message) {
   return (
     <>
       <div>
-        <h1>{message.content}</h1>
+        <h5>{message.content}</h5>
       </div>
     </>
   );
@@ -33,7 +33,7 @@ export default function TestList() {
   }, []);
 
   function loadDummyMessages() {
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 12; index++) {
       let message: Message = {
         id: index,
         content: index.toString(),
@@ -71,7 +71,9 @@ export default function TestList() {
     const currentPosition = list.current?.instance.scrollTop() ?? 0;
     customStore?.update(9, dummyMessage);
     dataSource?.reload().then(() => {
-      list.current?.instance.scrollTo(currentPosition);
+      setTimeout(() => {
+        list.current?.instance?.scrollTo(currentPosition);
+      });
     });
   }
 
@@ -97,7 +99,7 @@ export default function TestList() {
                   <List
                     ref={list}
                     dataSource={dataSource}
-                    height="400"
+                    height="600"
                     scrollingEnabled={true}
                     itemRender={convertToHtmlTemplate}
                     onScroll={UpdateCurrentPosition}

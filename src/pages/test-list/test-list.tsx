@@ -14,7 +14,7 @@ function convertToHtmlTemplate(message: Message) {
   return (
     <>
       <div>
-        <h5>{message.content}</h5>
+        <h5 className="wrap-text">{message.content}</h5>
       </div>
     </>
   );
@@ -32,26 +32,24 @@ export default function TestList() {
     loadDataSource();
   }, []);
 
-  function loadDummyMessages() {
-    for (let index = 0; index < 12; index++) {
+  const loadDummyMessages = () => {
+    for (let index = 0; index < 5; index++) {
       let message: Message = {
         id: index,
         content: index.toString(),
       };
       dummyMessage.push(message);
     }
-  }
+  };
 
-  function loadDataSource() {
+  const loadDataSource = () => {
     const customStore = new CustomStore({
       key: "id",
       load: () => {
         return Promise.resolve(dummyMessage);
       },
       update(key: number, values: Message[]) {
-        let x = dummyMessage[key];
-        x.content = "****";
-
+        dummyMessage[key].content = values[key].content;
         return Promise.resolve(dummyMessage);
       },
     });
@@ -65,17 +63,53 @@ export default function TestList() {
     });
 
     setDataSource(dataSource);
-  }
+  };
 
-  function changeContent() {
-    const currentPosition = list.current?.instance.scrollTop() ?? 0;
-    customStore?.update(9, dummyMessage);
+  const chat = async (responseLineNum: number) => {
+    loadDummyMessages();
+    let chatString = "";
+    for (let index = 0; index < 100; index++) {
+      const random = Math.floor(Math.random() * 600) + 200;
+      await new Promise((f) => setTimeout(f, random));
+      chatString += "**** ";
+      dummyMessage[responseLineNum].content = chatString;
+      customStore?.update(responseLineNum, dummyMessage);
+      changeContent();
+    }
+  };
+
+  // v.3
+  const changeContent = React.useCallback(async () => {
+    let position: any = list.current?.instance.scrollTop();
     dataSource?.reload().then(() => {
-      setTimeout(() => {
-        list.current?.instance?.scrollTo(currentPosition);
+      requestAnimationFrame(() => {
+        list.current?.instance?.scrollTo(position);
       });
     });
-  }
+  }, [list, customStore, dataSource]);
+
+  // v.2
+  // const changeContent = React.useCallback(() => {
+  //   let position: any = list.current?.instance.scrollTop();
+  //   customStore?.update(9, dummyMessage);
+
+  //   dataSource?.reload().then(() => {
+  //     requestAnimationFrame(() => {
+  //       list.current?.instance?.scrollTo(position);
+  //     })
+  //   });
+  // }, [list, customStore, dataSource]);
+
+  // v.1
+  // function changeContent() {
+  //   const currentPosition = list.current?.instance.scrollTop() ?? 0;
+  //   customStore?.update(9, dummyMessage);
+  //   dataSource?.reload().then(() => {
+  //     setTimeout(() => {
+  //       list.current?.instance?.scrollTo(currentPosition);
+  //     });
+  //   });
+  // }
 
   function UpdateCurrentPosition() {
     console.log(list.current?.instance.scrollTop() ?? 0);
@@ -88,9 +122,9 @@ export default function TestList() {
         <Box direction="row" width="100%">
           <Item ratio={3}>
             <Button
-              text="Change 9 to ****"
+              text="Response chat message in line 4"
               onClick={() => {
-                changeContent();
+                chat(3);
               }}
             ></Button>
             <div className="rect demo-dark">

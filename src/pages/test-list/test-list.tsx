@@ -124,7 +124,7 @@ export default function TestList() {
             <Button
               text="Response chat message in line 4"
               onClick={() => {
-                chat(3);
+                chat(4);
               }}
             ></Button>
             <div className="rect demo-dark">
